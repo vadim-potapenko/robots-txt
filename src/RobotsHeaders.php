@@ -31,12 +31,12 @@ class RobotsHeaders
 
     public function mayIndex(string $userAgent = '*'): bool
     {
-        return $this->none($userAgent) ? false : ! $this->noindex($userAgent);
+        return $this->none($userAgent) ? false : !$this->noindex($userAgent);
     }
 
     public function mayFollow(string $userAgent = '*'): bool
     {
-        return  $this->none($userAgent) ? false : ! $this->nofollow($userAgent);
+        return  $this->none($userAgent) ? false : !$this->nofollow($userAgent);
     }
 
     public function noindex(string $userAgent = '*'): bool
@@ -57,7 +57,7 @@ class RobotsHeaders
 
     public function none(string $userAgent = '*'): bool
     {
-        return 
+        return
             $this->robotHeadersProperties[$userAgent]['none']
             ?? $this->robotHeadersProperties['*']['none']
             ?? false;
@@ -66,23 +66,32 @@ class RobotsHeaders
     protected function parseHeaders(array $headers): array
     {
         $robotHeaders = $this->filterRobotHeaders($headers);
-
         return array_reduce($robotHeaders, function (array $parsedHeaders, $header) {
             $header = $this->normalizeHeaders($header);
-
             $headerParts = explode(':', $header);
-
-            $userAgent = count($headerParts) === 3
+            $userAgent = count($headerParts) >= 3
                 ? trim($headerParts[1])
                 : '*';
 
             $options = end($headerParts);
 
-            $parsedHeaders[$userAgent] = [
-                'noindex' => strpos(strtolower($options), 'noindex') !== false,
-                'nofollow' => strpos(strtolower($options), 'nofollow') !== false,
-                'none' => strpos(strtolower($options), 'none') !== false,
-            ];
+
+            $parsedHeaders[$userAgent] = array_merge(
+                $parsedHeaders[$userAgent] ?? [$userAgent => []],
+                array_filter(
+                    [
+                        'noindex' => strpos(strtolower($options), 'noindex') !== false,
+                        'nofollow' => strpos(strtolower($options), 'nofollow') !== false,
+                        'none' => strpos(strtolower($options), 'none') !== false,
+                        'max-snippet' => strpos(strtolower($header), 'max-snippet') ? trim($options) : false,
+                        'max-image-preview' =>  strpos(strtolower($header), 'max-image-preview') ? trim($options) : false,
+                        'max-video-preview' => strpos(strtolower($header), 'max-video-preview') ? trim($options) : false
+                    ],
+                    function ($element) {
+                        return $element;
+                    }
+                )
+            );
 
             return $parsedHeaders;
         }, []);
@@ -101,5 +110,36 @@ class RobotsHeaders
     protected function normalizeHeaders($headers): string
     {
         return implode(',', (array) $headers);
+    }
+
+    public function maxsnippet(string $userAgent = '*'): string
+    {
+        return
+            $this->robotHeadersProperties[$userAgent]['max-snippet']
+            ?? $this->robotHeadersProperties['*']['max-snippet']
+            ?? false;
+    }
+
+    public function maximagepreview(string $userAgent = '*'): string
+    {
+        return
+            $this->robotHeadersProperties[$userAgent]['max-image-preview']
+            ?? $this->robotHeadersProperties['*']['max-image-preview']
+            ?? false;
+    }
+
+    public function maxvideopreview(string $userAgent = '*'): string
+    {
+        return
+            $this->robotHeadersProperties[$userAgent]['max-video-preview']
+            ?? $this->robotHeadersProperties['*']['max-video-preview']
+            ?? false;
+    }
+
+    public function getMeta(string $userAgent = '*'): array
+    {
+        return
+            $this->robotHeadersProperties[$userAgent]
+            ?? array();
     }
 }
