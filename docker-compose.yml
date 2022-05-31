@@ -1,0 +1,11 @@
+version: '3.2'
+services:
+  robottxt:
+    build: .
+    ports:
+      - "80:80"
+      - "4020:4020"
+    volumes:
+      - ./:/var/www/html
+      - /var/www/html/vendors
+      - /var/www/html/tests/server/node_modules
