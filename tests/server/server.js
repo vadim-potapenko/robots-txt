@@ -26,6 +26,18 @@ app.get('/nofollow-noindex-google', function (req, res) {
     res.end();
 });
 
+app.get('/directives-google', function (req, res) {
+    console.log('Request at /directives-google');
+
+    var headers = { 
+        'X-Robots-Tag': [ 'google: max-snippet: 20', 'google: max-image-preview: standard', 'google: max-video-preview: -1']
+     };
+
+    res.writeHead(200, headers);
+
+    res.end();
+});
+
 app.get('/none', function (req, res) {
     console.log('Request at /none');
 
