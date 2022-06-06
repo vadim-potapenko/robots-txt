@@ -75,9 +75,8 @@ class RobotsHeaders
 
             $options = end($headerParts);
 
-
             $parsedHeaders[$userAgent] = array_merge(
-                $parsedHeaders[$userAgent] ?? [$userAgent => []],
+                $parsedHeaders[$userAgent] ?? [],
                 array_filter(
                     [
                         'noindex' => strpos(strtolower($options), 'noindex') !== false,
@@ -92,7 +91,6 @@ class RobotsHeaders
                     }
                 )
             );
-
             return $parsedHeaders;
         }, []);
     }
@@ -139,7 +137,8 @@ class RobotsHeaders
     public function getHeadersInformation(string $userAgent = '*'): array
     {
         return
-            $this->robotHeadersProperties[$userAgent]
+            array_merge($this->robotHeadersProperties['*'] ?? array(),
+                $this->robotHeadersProperties[$userAgent] ?? array())
             ?? array();
     }
 }

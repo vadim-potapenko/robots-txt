@@ -189,7 +189,10 @@ class RobotsMeta
 
     public function getMetaInformation(string $userAgent = 'robots') : array
     {
-        return $this->metaTagProperties[$userAgent] ?? array();
+        return
+            array_merge( $this->metaTagProperties['robots'] ?? array(),
+                $this->metaTagProperties[$userAgent] ?? array())
+            ?? array();
     }
 
 }
