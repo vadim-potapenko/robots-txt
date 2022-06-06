@@ -44,13 +44,19 @@ class RobotsMeta
     public function noindex(string $userAgent = 'robots'): bool
     {
         //return $this->robotsMetaTagProperties['noindex'] ?? false;
-        return $this->metaTagProperties[$userAgent]['noindex'] ?? false;
+        return 
+            $this->metaTagProperties[$userAgent]['noindex'] 
+            ?? $this->metaTagProperties['robots']['noindex']
+            ?? false;
     }
 
     public function nofollow(string $userAgent = 'robots'): bool
     {
         //return $this->robotsMetaTagProperties['nofollow'] ?? false;
-        return $this->metaTagProperties[$userAgent]['nofollow'] ?? false;
+        return 
+            $this->metaTagProperties[$userAgent]['nofollow'] 
+            ?? $this->metaTagProperties['robots']['nofollow'] 
+            ?? false;
     }
 
     protected function findRobotsMetaTagProperties(string $html): array
@@ -159,17 +165,26 @@ class RobotsMeta
     public function maxsnippet(string $userAgent = 'robots'): string
     {
         //!! need to take into account 'nosnipet'
-        return $this->metaTagProperties[$userAgent]['max-snipet'] ?? false;
+        return 
+            $this->metaTagProperties[$userAgent]['max-snipet'] 
+            ?? $this->metaTagProperties['robots']['max-snipet'] 
+            ?? false;
     }
 
     public function maximagepreview(string $userAgent = 'robots'): string
     {
-        return $this->metaTagProperties[$userAgent]['max-image-preview'] ?? false;
+        return 
+            $this->metaTagProperties[$userAgent]['max-image-preview']
+            ?? $this->metaTagProperties['robots']['max-image-preview']
+            ?? false;
     }
 
     public function maxvideopreview(string $userAgent = 'robots'): string
     {
-        return $this->metaTagProperties[$userAgent]['max-video-preview'] ?? false;
+        return 
+            $this->metaTagProperties[$userAgent]['max-video-preview']
+            ?? $this->metaTagProperties['robots']['max-video-preview']
+            ?? false;
     }
 
     public function getMetaInformation(string $userAgent = 'robots') : array
