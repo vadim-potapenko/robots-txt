@@ -3,12 +3,11 @@
 namespace Spatie\Robots;
 
 use InvalidArgumentException;
-use JetBrains\PhpStorm\ArrayShape;
 
 class RobotsMeta
 {
-    protected array $robotsMetaTagProperties = [];
-    protected array $metaTagProperties = [];
+    protected $robotsMetaTagProperties = [];
+    protected $metaTagProperties = [];
 
     public static function readFrom(string $source): self
     {
@@ -45,16 +44,21 @@ class RobotsMeta
     public function noindex(string $userAgent = 'robots'): bool
     {
         //return $this->robotsMetaTagProperties['noindex'] ?? false;
-        return $this->metaTagProperties[$userAgent]['noindex'] ?? false;
+        return 
+            $this->metaTagProperties[$userAgent]['noindex'] 
+            ?? $this->metaTagProperties['robots']['noindex']
+            ?? false;
     }
 
     public function nofollow(string $userAgent = 'robots'): bool
     {
         //return $this->robotsMetaTagProperties['nofollow'] ?? false;
-        return $this->metaTagProperties[$userAgent]['nofollow'] ?? false;
+        return 
+            $this->metaTagProperties[$userAgent]['nofollow'] 
+            ?? $this->metaTagProperties['robots']['nofollow'] 
+            ?? false;
     }
 
-    #[ArrayShape(['noindex' => "bool", 'nofollow' => "bool"])]
     protected function findRobotsMetaTagProperties(string $html): array
     {
         $metaTagLine = $this->findRobotsMetaTagLine($html);
@@ -161,22 +165,34 @@ class RobotsMeta
     public function maxsnippet(string $userAgent = 'robots'): string
     {
         //!! need to take into account 'nosnipet'
-        return $this->metaTagProperties[$userAgent]['max-snipet'] ?? false;
+        return 
+            $this->metaTagProperties[$userAgent]['max-snipet'] 
+            ?? $this->metaTagProperties['robots']['max-snipet'] 
+            ?? false;
     }
 
     public function maximagepreview(string $userAgent = 'robots'): string
     {
-        return $this->metaTagProperties[$userAgent]['max-image-preview'] ?? false;
+        return 
+            $this->metaTagProperties[$userAgent]['max-image-preview']
+            ?? $this->metaTagProperties['robots']['max-image-preview']
+            ?? false;
     }
 
     public function maxvideopreview(string $userAgent = 'robots'): string
     {
-        return $this->metaTagProperties[$userAgent]['max-video-preview'] ?? false;
+        return 
+            $this->metaTagProperties[$userAgent]['max-video-preview']
+            ?? $this->metaTagProperties['robots']['max-video-preview']
+            ?? false;
     }
 
-    public function getMeta (string $userAgent = 'robots') : array
+    public function getMetaInformation(string $userAgent = 'robots') : array
     {
-        return $this->metaTagProperties[$userAgent] ?? array();
+        return
+            array_merge( $this->metaTagProperties['robots'] ?? array(),
+                $this->metaTagProperties[$userAgent] ?? array())
+            ?? array();
     }
 
 }
