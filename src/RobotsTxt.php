@@ -4,9 +4,9 @@ namespace Spatie\Robots;
 
 class RobotsTxt
 {
-    protected static array $robotsCache = [];
+    protected static $robotsCache = [];
 
-    protected array $disallowsPerUserAgent = [];
+    protected $disallowsPerUserAgent = [];
 
     public static function readFrom(string $source): self
     {
@@ -32,7 +32,7 @@ class RobotsTxt
         return new self($source);
     }
 
-    public function allows(string $url, string | null $userAgent = '*'): bool
+    public function allows(string $url, ?string $userAgent = '*'): bool
     {
         $requestUri = '';
 
@@ -204,5 +204,21 @@ class RobotsTxt
     protected function isAllowLine(string $line): string
     {
         return trim(substr(str_replace(' ', '', strtolower(trim($line))), 0, 6), ': ') === 'allow';
+    }
+
+    /**
+     * @deprecated
+     */
+    protected function concernsDirectory(string $path): bool
+    {
+        return substr($path, strlen($path) - 1, 1) === '/';
+    }
+
+    /**
+     * @deprecated
+     */
+    protected function isUrlInDirectory(string $url, string $path): bool
+    {
+        return strpos($url, $path) === 0;
     }
 }
