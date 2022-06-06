@@ -206,19 +206,4 @@ class RobotsTxt
         return trim(substr(str_replace(' ', '', strtolower(trim($line))), 0, 6), ': ') === 'allow';
     }
 
-    /**
-     * @deprecated
-     */
-    protected function concernsDirectory(string $path): bool
-    {
-        return substr($path, strlen($path) - 1, 1) === '/';
-    }
-
-    /**
-     * @deprecated
-     */
-    protected function isUrlInDirectory(string $url, string $path): bool
-    {
-        return strpos($url, $path) === 0;
-    }
 }
