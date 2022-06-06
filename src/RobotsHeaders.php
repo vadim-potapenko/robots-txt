@@ -136,7 +136,7 @@ class RobotsHeaders
             ?? false;
     }
 
-    public function getMeta(string $userAgent = '*'): array
+    public function getHeadersInformation(string $userAgent = '*'): array
     {
         return
             $this->robotHeadersProperties[$userAgent]

@@ -172,7 +172,7 @@ class RobotsMeta
         return $this->metaTagProperties[$userAgent]['max-video-preview'] ?? false;
     }
 
-    public function getMeta (string $userAgent = 'robots') : array
+    public function getMetaInformation(string $userAgent = 'robots') : array
     {
         return $this->metaTagProperties[$userAgent] ?? array();
     }
